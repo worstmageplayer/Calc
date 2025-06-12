@@ -24,12 +24,6 @@ public class Token {
             return "Matrix";
         }
     }
-    public record CommaToken() implements TokenType {
-        @Override
-        public String toString() {
-            return ", CommaToken";
-        }
-    }
 
     public enum Operator {
         ADD('+'),
@@ -210,6 +204,13 @@ public class Token {
         @Override
         public String toString() {
             return identifier + " IdentifierToken";
+        }
+    }
+
+    public record CommaToken() implements TokenType {
+        @Override
+        public String toString() {
+            return ", CommaToken";
         }
     }
 
