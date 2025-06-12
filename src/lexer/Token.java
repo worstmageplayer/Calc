@@ -43,7 +43,7 @@ public class Token {
             return MAP.get(symbol);
         }
 
-        public static boolean isOperator(char c) {
+        public static boolean isMatrix(char c) {
             return MAP.containsKey(c);
         }
 
