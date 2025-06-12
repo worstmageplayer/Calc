@@ -6,8 +6,8 @@ import java.util.Map;
 
 public class Token {
     public sealed interface TokenType
-            permits NumberToken, OperatorToken, PrefixToken, SuffixToken,
-            ParenthesisToken, IdentifierToken, MatrixToken, CommaToken, EndToken {
+            permits NumberToken,MatrixToken, OperatorToken, PrefixToken, SuffixToken,
+            ParenthesisToken, IdentifierToken, CommaToken, SemiColonToken, EndToken {
         String toString();
     }
 
@@ -246,6 +246,13 @@ public class Token {
         @Override
         public String toString() {
             return ", CommaToken";
+        }
+    }
+
+    public record SemiColonToken() implements TokenType {
+        @Override
+        public String toString() {
+            return "; SemiColonToken";
         }
     }
 
