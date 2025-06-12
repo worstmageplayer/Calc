@@ -9,6 +9,7 @@ import java.util.List;
 import static lexer.Token.*;
 import static lexer.Token.Operator.isOperator;
 import static lexer.Token.Parenthesis.isParenthesis;
+import static lexer.Token.Matrix.isMatrix;
 import static lexer.Token.Prefix.isPrefix;
 import static lexer.Token.Suffix.isSuffix;
 
@@ -53,6 +54,12 @@ public class Lexer {
                 }
 
                 tokens.add(new NumberToken(new BigDecimal(stringBuffer.toString())));
+                continue;
+            }
+
+            if (isMatrix(c)) {
+                tokens.add(new MatrixToken(Matrix.fromSymbol(c)));
+                i++;
                 continue;
             }
 
