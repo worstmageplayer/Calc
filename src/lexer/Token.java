@@ -18,10 +18,45 @@ public class Token {
         }
     }
 
-    public record MatrixToken(BigDecimal[][] matrix) implements TokenType {
+    public enum Matrix {
+        OPEN('['),
+        CLOSE(']');
+
+        private final char matrixSymbol;
+
+        Matrix(char symbol) {
+            this.matrixSymbol = symbol;
+        }
+
+        public char getMatrixSymbol() {
+            return matrixSymbol;
+        }
+
+        private static final Map<Character, Matrix> MAP = new HashMap<>();
+        static {
+            for (Matrix m : values()) {
+                MAP.put(m.getMatrixSymbol(), m);
+            }
+        }
+
+        public static Matrix fromSymbol(char symbol) {
+            return MAP.get(symbol);
+        }
+
+        public static boolean isOperator(char c) {
+            return MAP.containsKey(c);
+        }
+
         @Override
         public String toString() {
-            return "Matrix";
+            return String.valueOf(matrixSymbol);
+        }
+    }
+
+    public record MatrixToken(Matrix matrix) implements TokenType {
+        @Override
+        public String toString() {
+            return matrix.toString() + " MatrixToken";
         }
     }
 
