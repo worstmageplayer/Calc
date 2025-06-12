@@ -93,6 +93,12 @@ public class Lexer {
                 continue;
             }
 
+            if (c == ';') {
+                tokens.add(new SemiColonToken());
+                i++;
+                continue;
+            }
+
             if (Character.isLetter(c)) {
                 stringBuffer.setLength(0);
 
