@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Token {
-
     public sealed interface TokenType
             permits NumberToken, OperatorToken, PrefixToken, SuffixToken,
-            ParenthesisToken, IdentifierToken, CommaToken, EndToken {
+            ParenthesisToken, IdentifierToken, MatrixToken, CommaToken, EndToken {
         String toString();
     }
 
@@ -16,6 +15,19 @@ public class Token {
         @Override
         public String toString() {
             return value.toString() + " NumberToken";
+        }
+    }
+
+    public record MatrixToken(BigDecimal[][] matrix) implements TokenType {
+        @Override
+        public String toString() {
+            return "Matrix";
+        }
+    }
+    public record CommaToken() implements TokenType {
+        @Override
+        public String toString() {
+            return ", CommaToken";
         }
     }
 
@@ -198,13 +210,6 @@ public class Token {
         @Override
         public String toString() {
             return identifier + " IdentifierToken";
-        }
-    }
-
-    public record CommaToken() implements TokenType {
-        @Override
-        public String toString() {
-            return ", CommaToken";
         }
     }
 
