@@ -36,11 +36,25 @@ public class Variables {
         variableMap.put(name, new BigDecimal(value));
     }
 
+    public static void add(String name, BigDecimal value) {
+        if (includes(name)) {
+            throw new RuntimeException(String.format("Variable %s already defined", name));
+        }
+        variableMap.put(name, value);
+    }
+
     public static void set(String name, String value) {
         if (!includes(name)) {
             throw new RuntimeException(String.format("Variable %s has not been defined", name));
         }
         variableMap.replace(name, new BigDecimal(value));
+    }
+
+    public static void set(String name, BigDecimal value) {
+        if (!includes(name)) {
+            throw new RuntimeException(String.format("Variable %s has not been defined", name));
+        }
+        variableMap.replace(name, value);
     }
 
     public static boolean includes(String name) {

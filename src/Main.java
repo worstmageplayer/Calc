@@ -37,9 +37,9 @@ public class Main {
                     System.out.println(node.toString());
                 }
 
-                String result = calculator.Calculator.calc(input).format();
-                System.out.println(result);
-                Variables.set("ans", result);
+                var result = calculator.Calculator.calc(input);
+                System.out.println(result.commas());
+                Variables.set("ans", result.raw());
             } catch (Exception e) {
                 StackTraceElement element = e.getStackTrace()[0];
                 System.out.println("Error: " + e.getMessage());

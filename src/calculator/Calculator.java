@@ -21,6 +21,32 @@ public class Calculator {
                     : value.stripTrailingZeros().toPlainString();
         }
 
+        public String commas() {
+            String formatted = format();
+            boolean negative = formatted.startsWith("-");
+            if (negative) formatted = formatted.substring(1);
+
+            int dotIndex = formatted.indexOf('.');
+            String intPart = (dotIndex >= 0) ? formatted.substring(0, dotIndex) : formatted;
+            String decPart = (dotIndex >= 0) ? formatted.substring(dotIndex) : "";
+
+            StringBuilder result = new StringBuilder();
+
+            for (int i = intPart.length() - 1, count = 0; i >= 0; i--, count++) {
+                if (count > 0 && count % 3 == 0) {
+                    result.append(',');
+                }
+                result.append(intPart.charAt(i));
+            }
+
+            result.reverse();
+
+            if (negative) result.insert(0, '-');
+            result.append(decPart);
+
+            return result.toString();
+        }
+
         public BigDecimal raw() {
             return value;
         }
