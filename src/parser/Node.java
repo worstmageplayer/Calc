@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Node {
     public sealed interface NodeType
-            permits NumberNode, MatrixNode, BinaryOperationNode, PrefixOperationNode,
+            permits NumberNode, BinaryOperationNode, PrefixOperationNode,
             SuffixOperationNode, VariableNode, FunctionNode {
         String toString();
     }
@@ -17,13 +17,6 @@ public class Node {
         @Override
         public String toString() {
             return value.toString();
-        }
-    }
-
-    public record MatrixNode(NodeType[][] matrix) implements NodeType {
-        @Override
-        public String toString() {
-            return "Matrix";
         }
     }
 

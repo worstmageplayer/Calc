@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Token {
     public sealed interface TokenType
-            permits NumberToken,MatrixToken, OperatorToken, PrefixToken, SuffixToken,
+            permits NumberToken, OperatorToken, PrefixToken, SuffixToken,
             ParenthesisToken, IdentifierToken, CommaToken, SemiColonToken, EndToken {
         String toString();
     }
@@ -15,48 +15,6 @@ public class Token {
         @Override
         public String toString() {
             return value.toString() + " NumberToken";
-        }
-    }
-
-    public enum Matrix {
-        OPEN('['),
-        CLOSE(']');
-
-        private final char matrixSymbol;
-
-        Matrix(char symbol) {
-            this.matrixSymbol = symbol;
-        }
-
-        public char getMatrixSymbol() {
-            return matrixSymbol;
-        }
-
-        private static final Map<Character, Matrix> MAP = new HashMap<>();
-        static {
-            for (Matrix m : values()) {
-                MAP.put(m.getMatrixSymbol(), m);
-            }
-        }
-
-        public static Matrix fromSymbol(char symbol) {
-            return MAP.get(symbol);
-        }
-
-        public static boolean isMatrix(char c) {
-            return MAP.containsKey(c);
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(matrixSymbol);
-        }
-    }
-
-    public record MatrixToken(Matrix matrix) implements TokenType {
-        @Override
-        public String toString() {
-            return matrix.toString() + " MatrixToken";
         }
     }
 

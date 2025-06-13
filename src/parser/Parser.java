@@ -76,6 +76,9 @@ public class Parser {
                 case CommaToken ignored -> {
                     break loop;
                 }
+                case SemiColonToken ignored -> {
+                    break loop;
+                }
                 case ParenthesisToken(Parenthesis parenthesis) -> {
                     if (parenthesis == Parenthesis.CLOSE) break loop;
 
