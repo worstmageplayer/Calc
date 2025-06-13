@@ -1,5 +1,3 @@
-import identifier.Variables;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -39,7 +37,6 @@ public class Main {
 
                 var result = calculator.Calculator.calc(input);
                 System.out.println(result.commas());
-                Variables.set("ans", result.raw());
             } catch (Exception e) {
                 StackTraceElement element = e.getStackTrace()[0];
                 System.out.println("Error: " + e.getMessage());

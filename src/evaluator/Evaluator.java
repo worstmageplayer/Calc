@@ -32,8 +32,14 @@ public class Evaluator {
                     case ADD -> left.add(right);
                     case SUB -> left.subtract(right);
                     case MUL -> left.multiply(right);
-                    case DIV -> left.divide(right, 20, RoundingMode.HALF_UP);
-                    case MOD -> left.remainder(right);
+                    case DIV -> {
+                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new RuntimeException("Division by zero.");
+                        else yield left.divide(right, 20, RoundingMode.HALF_UP);
+                    }
+                    case MOD -> {
+                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new RuntimeException("Division by zero.");
+                        else yield left.remainder(right);
+                    }
                     case POW -> {
                         if (right.scale() <= 0) yield left.pow(right.intValue());
                         else yield BigDecimal.valueOf(Math.pow(left.doubleValue(), right.doubleValue()));

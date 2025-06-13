@@ -1,5 +1,7 @@
 package calculator;
 
+import identifier.Variables;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -67,7 +69,8 @@ public class Calculator {
     }
 
     public static CalcResult calc(String input) {
-        return new CalcResult(evaluate(parse(tokenize(input)))
-        );
+        CalcResult result = new CalcResult(evaluate(parse(tokenize(input))));
+        Variables.set("ans", result.raw());
+        return result;
     }
 }
