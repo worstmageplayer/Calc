@@ -20,7 +20,7 @@ public class Node {
         }
     }
 
-    public record MatrixNode(BigDecimal[][] matrix) implements NodeType {
+    public record MatrixNode(NodeType[][] matrix) implements NodeType {
         @Override
         public String toString() {
             return "Matrix";
