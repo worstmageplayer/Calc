@@ -19,21 +19,29 @@ public class Token {
     }
 
     public enum Operator {
-        ADD('+'),
-        SUB('-'),
-        MUL('*'),
-        DIV('/'),
-        MOD('%'),
-        POW('^');
+        ADD('+', 2, 3),
+        SUB('-', 2, 3),
+        MUL('*', 4, 5),
+        DIV('/', 4, 5),
+        MOD('%', 4, 5),
+        POW('^', 7, 6);
 
         private final char operatorSymbol;
+        private final int leftbp;
+        private final int rightbp;
 
-        Operator(char symbol) {
+        Operator(char symbol, int leftbp, int rightbp) {
             this.operatorSymbol = symbol;
+            this.leftbp = leftbp;
+            this.rightbp = rightbp;
         }
 
         public char getOperatorSymbol() {
             return operatorSymbol;
+        }
+
+        public static int[] getBindingPower(Operator op) {
+            return new int[]{op.leftbp, op.rightbp};
         }
 
         private static final Map<Character, Operator> MAP = new HashMap<>();

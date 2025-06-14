@@ -1,11 +1,11 @@
 package parser;
 
 import lexer.Token.*;
+import static lexer.Token.Operator.getBindingPower;
 import parser.Node.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 public class Parser {
@@ -134,22 +134,6 @@ public class Parser {
         }
 
         return lhs;
-    }
-
-    private static final EnumMap<Operator, int[]> BINDING_POWER = new EnumMap<>(Operator.class);
-    static {
-        BINDING_POWER.put(Operator.ADD, new int[]{2, 3});
-        BINDING_POWER.put(Operator.SUB, new int[]{2, 3});
-        BINDING_POWER.put(Operator.MUL, new int[]{4, 5});
-        BINDING_POWER.put(Operator.DIV, new int[]{4, 5});
-        BINDING_POWER.put(Operator.MOD, new int[]{4, 5});
-        BINDING_POWER.put(Operator.POW, new int[]{7, 6});
-    }
-
-    private static int[] getBindingPower(Operator op) {
-        int[] bp = BINDING_POWER.get(op);
-        if (bp == null) throw new RuntimeException("Unknown operator: " + op);
-        return bp;
     }
 
     private boolean isOpenParenthesis(TokenType token) {
