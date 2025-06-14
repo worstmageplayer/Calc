@@ -67,18 +67,15 @@ public class Evaluator {
             case FunctionNode f -> {
                 Functions.Function func = getFunction(f.function().identifier());
                 List<String> params = func.params();
-                List<BigDecimal> args = new ArrayList<>(f.args().size());
-                for (NodeType arg : f.args()) {
-                    args.add(evaluate(arg));
+                int paramsSize = params.size();
+
+                if (f.args().size() != paramsSize) {
+                    throw new RuntimeException("Function '" + f.function().identifier() + "' expects " + paramsSize + " args, got " + f.args().size());
                 }
 
-                if (args.size() != params.size()) {
-                    throw new RuntimeException("Function '" + f.function().identifier() + "' expects " + params.size() + " args, got " + args.size());
-                }
-
-                Map<String, BigDecimal> scope = new HashMap<>(params.size());
-                for (int i = 0; i < params.size(); i++) {
-                    scope.put(params.get(i), args.get(i));
+                Map<String, BigDecimal> scope = new HashMap<>(paramsSize);
+                for (int i = 0; i < paramsSize; i++) {
+                    scope.put(params.get(i), evaluate(f.args().get(i)));
                 }
 
                 contextStack.push(scope);
@@ -93,13 +90,10 @@ public class Evaluator {
 
     private static BigDecimal resolveVariable(String name) {
         for (Map<String, BigDecimal> scope : contextStack) {
-            if (scope.containsKey(name)) {
-                return scope.get(name);
-            }
+            if (scope.containsKey(name)) return scope.get(name);
         }
-        if (Variables.includes(name)) {
-            return Variables.get(name);
-        }
+        if (Variables.includes(name)) return Variables.get(name);
+
         throw new RuntimeException("Variable not found: " + name);
     }
 
@@ -112,7 +106,7 @@ public class Evaluator {
         }
         BigDecimal result = BigDecimal.ONE;
         int i = 1;
-        while (i <= value.intValue()) {
+        while (i <= value.intValueExact()) {
             result = result.multiply(BigDecimal.valueOf(i));
             i++;
         }

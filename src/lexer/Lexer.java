@@ -15,11 +15,10 @@ import static lexer.Token.Suffix.isSuffix;
 public class Lexer {
     public static TokenType[] tokenize(String input) {
         final int inputLength = input.length();
-        if (inputLength == 0) return new NumberToken[]{new NumberToken(BigDecimal.ZERO)};
+        if (input.trim().isEmpty()) return new NumberToken[]{new NumberToken(BigDecimal.ZERO)};
         int i = 0;
 
-        List<TokenType> tokens = new ArrayList<>(inputLength);
-        StringBuilder stringBuffer = new StringBuilder();
+        final List<TokenType> tokens = new ArrayList<>(inputLength);
 
         while (i < inputLength) {
             char c = input.charAt(i);
@@ -30,29 +29,26 @@ public class Lexer {
             }
 
             if (Character.isDigit(c) || c == '.') {
-                stringBuffer.setLength(0);
+                final int start = i;
                 boolean dot = false;
 
                 while (i < inputLength) {
                     char cNum = input.charAt(i);
 
                     if (Character.isDigit(cNum)) {
-                        stringBuffer.append(cNum);
+                        i++;
                     } else if (cNum == '.') {
                         if (dot) throw new RuntimeException("Multiple dots in number");
                         dot = true;
-                        stringBuffer.append(cNum);
-                    } else {
-                        break;
-                    }
-                    i++;
+                        i++;
+                    } else break;
                 }
 
-                if (stringBuffer.length() == 1 && stringBuffer.charAt(0) == '.') {
+                if (i - start == 1 && input.charAt(start) == '.') {
                     throw new RuntimeException("A single dot is not a valid number");
                 }
 
-                tokens.add(new NumberToken(new BigDecimal(stringBuffer.toString())));
+                tokens.add(new NumberToken(new BigDecimal(input.substring(start, i))));
                 continue;
             }
 
@@ -93,17 +89,16 @@ public class Lexer {
             }
 
             if (Character.isLetter(c)) {
-                stringBuffer.setLength(0);
-
+                final int start = i;
+                i++;
                 while (i < inputLength) {
                     char cIdentifier = input.charAt(i);
-                    if (Character.isLetterOrDigit(cIdentifier) ||cIdentifier == '_') {
-                        stringBuffer.append(cIdentifier);
+                    if (Character.isLetterOrDigit(cIdentifier) || cIdentifier == '_') {
                         i++;
                     } else break;
                 }
 
-                tokens.add(new IdentifierToken(stringBuffer.toString()));
+                tokens.add(new IdentifierToken(input.substring(start, i)));
                 continue;
             }
 
@@ -116,7 +111,6 @@ public class Lexer {
 
     private static boolean isPrefixChar(char c, List<TokenType> tokenList) {
         if (!isPrefix(c)) return false;
-
         if (tokenList.isEmpty()) return true;
 
         TokenType last = tokenList.getLast();
@@ -125,14 +119,13 @@ public class Lexer {
             case PrefixToken ignored -> true;
             case OperatorToken ignored -> true;
             case CommaToken ignored -> true;
-            case ParenthesisToken pT when pT.parenthesis() == Parenthesis.OPEN -> true;
+            case ParenthesisToken p when p.parenthesis() == Parenthesis.OPEN -> true;
             default -> false;
         };
     }
 
     private static boolean isSuffixChar(char c, List<TokenType> tokenList) {
         if (!isSuffix(c)) return false;
-
         if (tokenList.isEmpty()) return false;
 
         TokenType last = tokenList.getLast();
