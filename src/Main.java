@@ -12,7 +12,7 @@ public class Main {
             String input = scanner.nextLine();
 
             if (input.equalsIgnoreCase("help")) {
-                System.out.print("Type dev for devMode\nType esc to exit\nExample:\n> 1 + 1\n2\n");
+                System.out.print("Type dev for devMode\nType esc to exit\nExample:\n> 1+4\n5\n");
                 continue;
             }
 
@@ -34,14 +34,13 @@ public class Main {
                     parser.Node.NodeType node = parser.Parser.parse(tokens);
                     System.out.println(node.toString());
                 }
-
                 var result = calculator.Calculator.calc(input);
                 System.out.println(result.commas());
             } catch (Exception e) {
                 StackTraceElement element = e.getStackTrace()[0];
-                System.out.println("Error: " + e.getMessage());
+                System.out.printf("Error: %s\n", e.getMessage());
                 if (devMode) {
-                    System.out.println("At: " + element.getClassName() + "." + element.getMethodName() + " (Line " + element.getLineNumber() + ")");
+                    System.out.printf("At: %s.%s (Line %s)\n", element.getClassName(), element.getMethodName(), element.getLineNumber());
                 }
             }
         }
