@@ -27,13 +27,13 @@ public class Token {
         POW('^', 7, 6);
 
         private final char operatorSymbol;
-        private final int leftbp;
-        private final int rightbp;
+        private final int leftBindingPower;
+        private final int rightBindingPower;
 
-        Operator(char symbol, int leftbp, int rightbp) {
+        Operator(char symbol, int left, int right) {
             this.operatorSymbol = symbol;
-            this.leftbp = leftbp;
-            this.rightbp = rightbp;
+            this.leftBindingPower = left;
+            this.rightBindingPower = right;
         }
 
         public char getOperatorSymbol() {
@@ -41,7 +41,7 @@ public class Token {
         }
 
         public static int[] getBindingPower(Operator op) {
-            return new int[]{op.leftbp, op.rightbp};
+            return new int[]{op.leftBindingPower, op.rightBindingPower};
         }
 
         private static final Map<Character, Operator> MAP = new HashMap<>();
