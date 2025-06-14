@@ -44,11 +44,10 @@ public class Lexer {
                     } else break;
                 }
 
-                if (i - start == 1 && input.charAt(start) == '.') {
-                    throw new RuntimeException("A single dot is not a valid number");
-                }
+                String number = input.substring(start, i);
+                if (number.equals(".")) throw new RuntimeException("A single dot is not a valid number.");
 
-                tokens.add(new NumberToken(new BigDecimal(input.substring(start, i))));
+                tokens.add(new NumberToken(new BigDecimal(number)));
                 continue;
             }
 
