@@ -17,10 +17,8 @@ public class Functions {
         add("cube", List.of("x"), "x^3");
         add("sqrt", List.of("x"), "x^0.5");
         add("power", List.of("x", "y"), "x^y");
-        add("f", List.of("x", "y"), "x^y");
-        add("g", List.of("x", "y"), "f(x,2)+y");
-        add("add", List.of("x", "y"), "x+y");
         add("sum", List.of("x", "y"), "x+y");
+        add("test", List.of("x", "y", "z"), "x^2-3*y+4z+0.5");
     }
 
     private static List<String> parseParams(String paramString) {

@@ -243,22 +243,22 @@ public class Token {
     private final static EnumMap<Suffix, SuffixToken> suffixPool = new EnumMap<>(Suffix.class);
     private final static EnumMap<Parenthesis, ParenthesisToken> parenthesisPool = new EnumMap<>(Parenthesis.class);
 
-    public static NumberToken numberToken(BigDecimal value) {
-        return numberPool.computeIfAbsent(value, NumberToken::new);
+    public static NumberToken numberToken(String value) {
+        return numberPool.computeIfAbsent(new BigDecimal(value).stripTrailingZeros(), NumberToken::new);
     }
     public static IdentifierToken identifierToken(String id) {
         return identifierPool.computeIfAbsent(id.intern(), IdentifierToken::new);
     }
-    public static OperatorToken operatorToken(Operator op) {
-        return operatorPool.computeIfAbsent(op, OperatorToken::new);
+    public static OperatorToken operatorToken(char op) {
+        return operatorPool.computeIfAbsent(Operator.fromSymbol(op), OperatorToken::new);
     }
-    public static PrefixToken prefixToken(Prefix p) {
-        return prefixPool.computeIfAbsent(p, PrefixToken::new);
+    public static PrefixToken prefixToken(char p) {
+        return prefixPool.computeIfAbsent(Prefix.fromSymbol(p), PrefixToken::new);
     }
-    public static SuffixToken suffixToken(Suffix s) {
-        return suffixPool.computeIfAbsent(s, SuffixToken::new);
+    public static SuffixToken suffixToken(char s) {
+        return suffixPool.computeIfAbsent(Suffix.fromSymbol(s), SuffixToken::new);
     }
-    public static ParenthesisToken parenthesisToken(Parenthesis p) {
-        return parenthesisPool.computeIfAbsent(p, ParenthesisToken::new);
+    public static ParenthesisToken parenthesisToken(char p) {
+        return parenthesisPool.computeIfAbsent(Parenthesis.fromSymbol(p), ParenthesisToken::new);
     }
 }
