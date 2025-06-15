@@ -75,6 +75,17 @@ public class Lexer {
                 continue;
             }
 
+            if (Character.isLetter(c)) {
+                final int start = i++;
+                while (i < inputLength) {
+                    c = input.charAt(i);
+                    if (!Character.isLetterOrDigit(c) && c != '_') break;
+                    i++;
+                }
+                tokens.add(identifierToken(input.substring(start, i)));
+                continue;
+            }
+
             if (c == ',') {
                 tokens.add(CommaToken.COMMA_TOKEN);
                 i++;
@@ -84,17 +95,6 @@ public class Lexer {
             if (c == ';') {
                 tokens.add(SemiColonToken.SEMI_COLON_TOKEN);
                 i++;
-                continue;
-            }
-
-            if (Character.isLetter(c)) {
-                final int start = i++;
-                while (i < inputLength) {
-                    c = input.charAt(i);
-                    if (!Character.isLetterOrDigit(c) && c != '_') break;
-                    i++;
-                }
-                tokens.add(identifierToken(input.substring(start, i)));
                 continue;
             }
 
