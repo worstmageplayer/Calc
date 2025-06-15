@@ -208,16 +208,18 @@ public class Token {
         }
     }
 
-    private final static Map<BigDecimal, NumberToken> numberPool = new LinkedHashMap<>(1000, 0.75f, true) {
+    private static final int MAX_CACHE = 5000;
+
+    private final static Map<BigDecimal, NumberToken> numberPool = new LinkedHashMap<>(MAX_CACHE, 1, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<BigDecimal, NumberToken> eldest) {
-            return size() > 10000;
+            return size() > MAX_CACHE;
         }
     };
-    private final static Map<String, IdentifierToken> identifierPool = new LinkedHashMap<>(1000, 0.75f, true) {
+    private final static Map<String, IdentifierToken> identifierPool = new LinkedHashMap<>(MAX_CACHE, 1, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, IdentifierToken> eldest) {
-            return size() > 10000;
+            return size() > MAX_CACHE;
         }
     };
 
