@@ -4,9 +4,7 @@ import lexer.Token.TokenType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static lexer.Token.*;
 import static lexer.Token.Operator.isOperator;
