@@ -40,10 +40,8 @@ public class Parser {
 
                     while (tokens[pos] != ParenthesisToken.CLOSE) {
                         args.add(parseExpression(0));
-                        if (tokens[pos] != ParenthesisToken.CLOSE) {
-                            if (!(tokens[pos++] instanceof CommaToken)) {
-                                throw new RuntimeException("Expected comma between arguments");
-                            }
+                        if (tokens[pos] != ParenthesisToken.CLOSE && tokens[pos++] != CommaToken.COMMA_TOKEN) {
+                            throw new RuntimeException("Expected comma between arguments");
                         }
                     }
 
@@ -107,10 +105,8 @@ public class Parser {
 
                         while (tokens[pos] != ParenthesisToken.CLOSE) {
                             args.add(parseExpression(0));
-                            if (tokens[pos] != ParenthesisToken.CLOSE) {
-                                if (!(tokens[pos++] instanceof CommaToken)) {
-                                    throw new RuntimeException("Expected comma between arguments");
-                                }
+                            if (tokens[pos] != ParenthesisToken.CLOSE && tokens[pos++] != CommaToken.COMMA_TOKEN) {
+                                throw new RuntimeException("Expected comma between arguments");
                             }
                         }
 
