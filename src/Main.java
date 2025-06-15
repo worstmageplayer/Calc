@@ -6,6 +6,7 @@ public class Main {
         boolean devMode = false;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter expressions to calculate. Type 'help' for help.");
+        calculator.Calculator.calc("1+1-1*1/1+pi-power(1,1)");
 
         while (true) {
             System.out.print("> ");
