@@ -71,11 +71,9 @@ public class Evaluator {
                 }
 
                 variablesStack.push(scope);
-                try {
-                    yield evaluate(func.body());
-                } finally {
-                    variablesStack.pop();
-                }
+                BigDecimal result =  evaluate(func.body());
+                variablesStack.pop();
+                yield result;
             }
         };
     }
