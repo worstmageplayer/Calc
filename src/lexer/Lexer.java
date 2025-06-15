@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static lexer.Token.*;
-import static lexer.Token.Operator.isOperator;
-import static lexer.Token.Parenthesis.isParenthesis;
-import static lexer.Token.Prefix.isPrefix;
-import static lexer.Token.Suffix.isSuffix;
+import static lexer.Token.OperatorToken.isOperator;
+import static lexer.Token.ParenthesisToken.isParenthesis;
+import static lexer.Token.PrefixToken.isPrefix;
+import static lexer.Token.SuffixToken.isSuffix;
 
 public class Lexer {
     public static TokenType[] tokenize(String input) {
@@ -115,7 +115,7 @@ public class Lexer {
             case PrefixToken ignored -> true;
             case OperatorToken ignored -> true;
             case CommaToken ignored -> true;
-            case ParenthesisToken p when p.parenthesis() == Parenthesis.OPEN -> true;
+            case ParenthesisToken p when p == ParenthesisToken.OPEN -> true;
             default -> false;
         };
     }
@@ -129,7 +129,7 @@ public class Lexer {
         return switch (last) {
             case NumberToken ignored -> true;
             case IdentifierToken ignored -> true;
-            case ParenthesisToken p when p.parenthesis() == Parenthesis.CLOSE -> true;
+            case ParenthesisToken p when p == ParenthesisToken.CLOSE -> true;
             default -> false;
         };
     }

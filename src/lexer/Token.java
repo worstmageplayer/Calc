@@ -1,7 +1,6 @@
 package lexer;
 
 import java.math.BigDecimal;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,7 +19,14 @@ public class Token {
         }
     }
 
-    public enum Operator {
+    public record IdentifierToken(String identifier) implements TokenType {
+        @Override
+        public String toString() {
+            return identifier + " IdentifierToken";
+        }
+    }
+
+    public enum OperatorToken implements TokenType {
         ADD('+', 2, 3),
         SUB('-', 2, 3),
         MUL('*', 4, 5),
@@ -32,7 +38,7 @@ public class Token {
         private final int leftBindingPower;
         private final int rightBindingPower;
 
-        Operator(char symbol, int left, int right) {
+        OperatorToken(char symbol, int left, int right) {
             this.operatorSymbol = symbol;
             this.leftBindingPower = left;
             this.rightBindingPower = right;
@@ -42,18 +48,18 @@ public class Token {
             return operatorSymbol;
         }
 
-        public static int[] getBindingPower(Operator op) {
+        public static int[] getBindingPower(OperatorToken op) {
             return new int[]{op.leftBindingPower, op.rightBindingPower};
         }
 
-        private static final Map<Character, Operator> MAP = new HashMap<>();
+        private static final Map<Character, OperatorToken> MAP = new HashMap<>();
         static {
-            for (Operator op : values()) {
+            for (OperatorToken op : values()) {
                 MAP.put(op.getOperatorSymbol(), op);
             }
         }
 
-        public static Operator fromSymbol(char symbol) {
+        public static OperatorToken fromSymbol(char symbol) {
             return MAP.get(symbol);
         }
 
@@ -67,20 +73,13 @@ public class Token {
         }
     }
 
-    public record OperatorToken(Operator operator) implements TokenType {
-        @Override
-        public String toString() {
-            return operator.toString() + " OperatorToken";
-        }
-    }
-
-    public enum Prefix {
+    public enum PrefixToken implements TokenType {
         PLUS('+'),
         MINUS('-');
 
         private final char prefixSymbol;
 
-        Prefix(char symbol) {
+        PrefixToken(char symbol) {
             this.prefixSymbol = symbol;
         }
 
@@ -88,14 +87,14 @@ public class Token {
             return prefixSymbol;
         }
 
-        private static final Map<Character, Prefix> MAP = new HashMap<>();
+        private static final Map<Character, PrefixToken> MAP = new HashMap<>();
         static {
-            for (Prefix p : values()) {
+            for (PrefixToken p : values()) {
                 MAP.put(p.getPrefixSymbol(), p);
             }
         }
 
-        public static Prefix fromSymbol(char symbol) {
+        public static PrefixToken fromSymbol(char symbol) {
             return MAP.get(symbol);
         }
 
@@ -109,14 +108,7 @@ public class Token {
         }
     }
 
-    public record PrefixToken(Prefix prefix) implements TokenType {
-        @Override
-        public String toString() {
-            return prefix.toString() + " PrefixToken";
-        }
-    }
-
-    public enum Suffix {
+    public enum SuffixToken implements TokenType {
         THOUSAND('k'),
         MILLION('m'),
         BILLION('b'),
@@ -125,7 +117,7 @@ public class Token {
 
         private final char suffixSymbol;
 
-        Suffix(char symbol) {
+        SuffixToken(char symbol) {
             this.suffixSymbol = symbol;
         }
 
@@ -133,14 +125,14 @@ public class Token {
             return suffixSymbol;
         }
 
-        private static final Map<Character, Suffix> MAP = new HashMap<>();
+        private static final Map<Character, SuffixToken> MAP = new HashMap<>();
         static {
-            for (Suffix s : values()) {
+            for (SuffixToken s : values()) {
                 MAP.put(s.getSuffixSymbol(), s);
             }
         }
 
-        public static Suffix fromSymbol(char symbol) {
+        public static SuffixToken fromSymbol(char symbol) {
             return MAP.get(symbol);
         }
 
@@ -154,20 +146,13 @@ public class Token {
         }
     }
 
-    public record SuffixToken(Suffix suffix) implements TokenType {
-        @Override
-        public String toString() {
-            return suffix.toString() + " SuffixToken";
-        }
-    }
-
-    public enum Parenthesis {
+    public enum ParenthesisToken implements TokenType {
         OPEN('('),
         CLOSE(')');
 
         private final char parenthesisSymbol;
 
-        Parenthesis(char symbol) {
+        ParenthesisToken(char symbol) {
             this.parenthesisSymbol = symbol;
         }
 
@@ -175,14 +160,14 @@ public class Token {
             return parenthesisSymbol;
         }
 
-        private static final Map<Character, Parenthesis> MAP = new HashMap<>();
+        private static final Map<Character, ParenthesisToken> MAP = new HashMap<>();
         static {
-            for (Parenthesis p : values()) {
+            for (ParenthesisToken p : values()) {
                 MAP.put(p.getParenthesisSymbol(), p);
             }
         }
 
-        public static Parenthesis fromSymbol(char symbol) {
+        public static ParenthesisToken fromSymbol(char symbol) {
             return MAP.get(symbol);
         }
 
@@ -193,20 +178,6 @@ public class Token {
         @Override
         public String toString() {
             return String.valueOf(parenthesisSymbol);
-        }
-    }
-
-    public record ParenthesisToken(Parenthesis parenthesis) implements TokenType {
-        @Override
-        public String toString() {
-            return parenthesis.toString() + " ParenthesisToken";
-        }
-    }
-
-    public record IdentifierToken(String identifier) implements TokenType {
-        @Override
-        public String toString() {
-            return identifier + " IdentifierToken";
         }
     }
 
@@ -249,10 +220,6 @@ public class Token {
             return size() > 10000;
         }
     };
-    private final static EnumMap<Operator, OperatorToken> operatorPool = new EnumMap<>(Operator.class);
-    private final static EnumMap<Prefix, PrefixToken> prefixPool = new EnumMap<>(Prefix.class);
-    private final static EnumMap<Suffix, SuffixToken> suffixPool = new EnumMap<>(Suffix.class);
-    private final static EnumMap<Parenthesis, ParenthesisToken> parenthesisPool = new EnumMap<>(Parenthesis.class);
 
     public static NumberToken numberToken(String value) {
         return numberPool.computeIfAbsent(new BigDecimal(value).stripTrailingZeros(), NumberToken::new);
@@ -260,16 +227,16 @@ public class Token {
     public static IdentifierToken identifierToken(String id) {
         return identifierPool.computeIfAbsent(id.intern(), IdentifierToken::new);
     }
-    public static OperatorToken operatorToken(char op) {
-        return operatorPool.computeIfAbsent(Operator.fromSymbol(op), OperatorToken::new);
+    public static OperatorToken operatorToken(char c) {
+        return OperatorToken.fromSymbol(c);
     }
-    public static PrefixToken prefixToken(char p) {
-        return prefixPool.computeIfAbsent(Prefix.fromSymbol(p), PrefixToken::new);
+    public static PrefixToken prefixToken(char c) {
+        return PrefixToken.fromSymbol(c);
     }
-    public static SuffixToken suffixToken(char s) {
-        return suffixPool.computeIfAbsent(Suffix.fromSymbol(s), SuffixToken::new);
+    public static SuffixToken suffixToken(char c) {
+        return SuffixToken.fromSymbol(c);
     }
-    public static ParenthesisToken parenthesisToken(char p) {
-        return parenthesisPool.computeIfAbsent(Parenthesis.fromSymbol(p), ParenthesisToken::new);
+    public static ParenthesisToken parenthesisToken(char c) {
+        return ParenthesisToken.fromSymbol(c);
     }
 }

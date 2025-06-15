@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lexer.Token.Operator.getBindingPower;
+import static lexer.Token.OperatorToken.getBindingPower;
 
 public class Parser {
     private final TokenType[] tokens;
@@ -23,7 +23,7 @@ public class Parser {
         return new Parser(tokens).parseExpression(0);
     }
 
-    private NodeType prefixNodeSoThatMyIDECanShutUP(Prefix prefix) {
+    private NodeType prefixNodeSoThatMyIDECanShutUP(PrefixToken prefix) {
         return new PrefixOperationNode(parseExpression(9), prefix);
     }
 
@@ -53,8 +53,8 @@ public class Parser {
                     lhs = new VariableNode(id);
                 }
             }
-            case PrefixToken prefix -> lhs = prefixNodeSoThatMyIDECanShutUP(prefix.prefix());
-            case ParenthesisToken p when p.parenthesis() == Parenthesis.OPEN -> {
+            case PrefixToken prefix -> lhs = prefixNodeSoThatMyIDECanShutUP(prefix);
+            case ParenthesisToken p when p == ParenthesisToken.OPEN -> {
                 lhs = parseExpression(0);
                 if (!isCloseParenthesis(tokens[pos])) {
                     throw new RuntimeException("Expected closing parenthesis");
@@ -67,15 +67,15 @@ public class Parser {
         loop:
         while (pos < tokensLength) {
             int[] bp;
-            Operator implicitMul = Operator.MUL;
+            OperatorToken implicitMul = OperatorToken.MUL;
             TokenType next = tokens[pos];
 
             switch (next) {
                 case EndToken ignored -> {break loop;}
                 case CommaToken ignored -> {break loop;}
                 case SemiColonToken ignored -> {break loop;}
-                case ParenthesisToken(Parenthesis parenthesis) -> {
-                    if (parenthesis == Parenthesis.CLOSE) break loop;
+                case ParenthesisToken parenthesis -> {
+                    if (parenthesis == ParenthesisToken.CLOSE) break loop;
 
                     bp = getBindingPower(implicitMul);
                     if (bp[0] < minBp) break loop;
@@ -87,7 +87,7 @@ public class Parser {
 
                     lhs = new BinaryOperationNode(lhs, rhs, implicitMul);
                 }
-                case SuffixToken(Suffix suffix) -> {
+                case SuffixToken suffix -> {
                     pos++; // Consume 'suffix'
                     lhs = new SuffixOperationNode(lhs, suffix);
                 }
@@ -117,7 +117,7 @@ public class Parser {
                     if (bp[0] < minBp) break loop;
                     lhs = new BinaryOperationNode(lhs, rhs, implicitMul);
                 }
-                case OperatorToken(Operator operator) -> {
+                case OperatorToken operator -> {
                     bp = getBindingPower(operator);
                     if (bp[0] < minBp) break loop;
                     pos++; // Consume 'operator'
@@ -138,11 +138,11 @@ public class Parser {
     }
 
     private boolean isOpenParenthesis(TokenType token) {
-        return token instanceof ParenthesisToken(Parenthesis parenthesis) && parenthesis == Parenthesis.OPEN;
+        return token instanceof ParenthesisToken parenthesis && parenthesis == ParenthesisToken.OPEN;
     }
 
     private boolean isCloseParenthesis(TokenType token) {
-        return token instanceof ParenthesisToken(Parenthesis parenthesis) && parenthesis == Parenthesis.CLOSE;
+        return token instanceof ParenthesisToken parenthesis && parenthesis == ParenthesisToken.CLOSE;
     }
 
 }

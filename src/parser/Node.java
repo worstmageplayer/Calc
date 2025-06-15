@@ -20,21 +20,21 @@ public class Node {
         }
     }
 
-    public record BinaryOperationNode(NodeType left, NodeType right, Operator operator) implements NodeType {
+    public record BinaryOperationNode(NodeType left, NodeType right, OperatorToken operator) implements NodeType {
         @Override
         public String toString() {
             return "(" + operator.toString() + " " + left.toString() + " " + right.toString() + ")";
         }
     }
 
-    public record PrefixOperationNode(NodeType value, Prefix prefix) implements NodeType {
+    public record PrefixOperationNode(NodeType value, PrefixToken prefix) implements NodeType {
         @Override
         public String toString() {
             return "(" + prefix.toString() + " " + value.toString() + ")";
         }
     }
 
-    public record SuffixOperationNode(NodeType value, Suffix suffix) implements NodeType {
+    public record SuffixOperationNode(NodeType value, SuffixToken suffix) implements NodeType {
         @Override
         public String toString() {
             return "(" + suffix.toString() + " " + value.toString() + ")";

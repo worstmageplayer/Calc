@@ -41,8 +41,8 @@ public class Evaluator {
             case PrefixOperationNode p -> {
                 BigDecimal value = evaluate(p.value());
                 yield switch (p.prefix()) {
-                    case Token.Prefix.PLUS -> value;
-                    case Token.Prefix.MINUS -> value.negate();
+                    case Token.PrefixToken.PLUS -> value;
+                    case Token.PrefixToken.MINUS -> value.negate();
                 };
             }
             case SuffixOperationNode s -> {
