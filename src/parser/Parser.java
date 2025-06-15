@@ -5,7 +5,6 @@ import parser.Node.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import static lexer.Token.OperatorToken.getBindingPower;
 
@@ -36,7 +35,7 @@ public class Parser {
             case IdentifierToken id -> {
                 if (tokens[pos] == ParenthesisToken.OPEN) {
                     pos++; // Consume '('
-                    List<NodeType> args = new ArrayList<>();
+                    ArrayList<NodeType> args = new ArrayList<>();
 
                     while (tokens[pos] != ParenthesisToken.CLOSE) {
                         args.add(parseExpression(0));
@@ -101,7 +100,7 @@ public class Parser {
                     pos++; // Consume 'variable'
                     if (tokens[pos] == ParenthesisToken.OPEN) {
                         pos++; // Consume '('
-                        List<NodeType> args = new ArrayList<>();
+                        ArrayList<NodeType> args = new ArrayList<>();
 
                         while (tokens[pos] != ParenthesisToken.CLOSE) {
                             args.add(parseExpression(0));

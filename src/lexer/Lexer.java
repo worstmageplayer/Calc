@@ -4,7 +4,6 @@ import lexer.Token.TokenType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import static lexer.Token.*;
 import static lexer.Token.OperatorToken.isOperator;
@@ -18,7 +17,7 @@ public class Lexer {
         if (input.trim().isEmpty()) return new NumberToken[]{new NumberToken(BigDecimal.ZERO)};
         int i = 0;
 
-        final List<TokenType> tokens = new ArrayList<>(inputLength);
+        final ArrayList<TokenType> tokens = new ArrayList<>(inputLength);
 
         while (i < inputLength) {
             char c = input.charAt(i);
@@ -105,7 +104,7 @@ public class Lexer {
         return tokens.toArray(TokenType[]::new);
     }
 
-    private static boolean isPrefixChar(char c, List<TokenType> tokenList) {
+    private static boolean isPrefixChar(char c, ArrayList<TokenType> tokenList) {
         if (!isPrefix(c)) return false;
         if (tokenList.isEmpty()) return true;
 
@@ -120,7 +119,7 @@ public class Lexer {
         };
     }
 
-    private static boolean isSuffixChar(char c, List<TokenType> tokenList) {
+    private static boolean isSuffixChar(char c, ArrayList<TokenType> tokenList) {
         if (!isSuffix(c)) return false;
         if (tokenList.isEmpty()) return false;
 
