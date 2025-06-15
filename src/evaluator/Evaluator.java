@@ -12,12 +12,7 @@ import java.util.*;
 import static identifier.Functions.getFunction;
 
 public class Evaluator {
-    private static final BigDecimal thousand = BigDecimal.valueOf(1000);
-    private static final BigDecimal million = BigDecimal.valueOf(1000000);
-    private static final BigDecimal billion = BigDecimal.valueOf(1000000000);
-    private static final BigDecimal trillion = BigDecimal.valueOf(1000000000000L);
-
-    private static final Deque<Map<String, BigDecimal>> contextStack = new ArrayDeque<>();
+    private static final Deque<Map<String, BigDecimal>> variablesStack = new ArrayDeque<>();
 
     public static BigDecimal evaluate(NodeType node) {
         return switch (node) {
@@ -53,10 +48,10 @@ public class Evaluator {
             case SuffixOperationNode s -> {
                 BigDecimal value = evaluate(s.value());
                 yield switch (s.suffix()) {
-                    case THOUSAND -> value.multiply(thousand);
-                    case MILLION -> value.multiply(million);
-                    case BILLION -> value.multiply(billion);
-                    case TRILLION -> value.multiply(trillion);
+                    case THOUSAND -> value.scaleByPowerOfTen(3);
+                    case MILLION -> value.scaleByPowerOfTen(6);
+                    case BILLION -> value.scaleByPowerOfTen(9);
+                    case TRILLION -> value.scaleByPowerOfTen(12);
                     case FACTORIAL -> factorial(value);
                 };
             }
@@ -75,18 +70,18 @@ public class Evaluator {
                     scope.put(params.get(i), evaluate(f.args().get(i)));
                 }
 
-                contextStack.push(scope);
+                variablesStack.push(scope);
                 try {
                     yield evaluate(func.body());
                 } finally {
-                    contextStack.pop();
+                    variablesStack.pop();
                 }
             }
         };
     }
 
     private static BigDecimal resolveVariable(String name) {
-        Map<String, BigDecimal> scope = contextStack.peek();
+        Map<String, BigDecimal> scope = variablesStack.peek();
         if (scope != null && scope.containsKey(name)) return scope.get(name);
 
         if (Variables.includes(name)) return Variables.get(name);
@@ -104,8 +99,7 @@ public class Evaluator {
         BigDecimal result = BigDecimal.ONE;
         int i = 1;
         while (i <= value.intValueExact()) {
-            result = result.multiply(BigDecimal.valueOf(i));
-            i++;
+            result = result.multiply(BigDecimal.valueOf(i++));
         }
         return result;
     }
