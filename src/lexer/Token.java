@@ -209,6 +209,8 @@ public class Token {
     }
 
     public record CommaToken() implements TokenType {
+        public static final CommaToken COMMA_TOKEN = new CommaToken();
+
         @Override
         public String toString() {
             return ", CommaToken";
@@ -216,6 +218,8 @@ public class Token {
     }
 
     public record SemiColonToken() implements TokenType {
+        public static final SemiColonToken SEMI_COLON_TOKEN = new SemiColonToken();
+
         @Override
         public String toString() {
             return "; SemiColonToken";
@@ -223,6 +227,8 @@ public class Token {
     }
 
     public record EndToken() implements TokenType {
+        public static final EndToken END_TOKEN = new EndToken();
+
         @Override
         public String toString() {
             return "END";

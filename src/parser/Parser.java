@@ -1,12 +1,13 @@
 package parser;
 
 import lexer.Token.*;
-import static lexer.Token.Operator.getBindingPower;
 import parser.Node.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static lexer.Token.Operator.getBindingPower;
 
 public class Parser {
     private final TokenType[] tokens;
