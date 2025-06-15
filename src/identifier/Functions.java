@@ -20,6 +20,7 @@ public class Functions {
         add("f", List.of("x", "y"), "x^y");
         add("g", List.of("x", "y"), "f(x,2)+y");
         add("add", List.of("x", "y"), "x+y");
+        add("sum", List.of("x", "y"), "x+y");
     }
 
     private static List<String> parseParams(String paramString) {
