@@ -69,7 +69,7 @@ public class Token {
 
         @Override
         public String toString() {
-            return String.valueOf(operatorSymbol);
+            return operatorSymbol + " OperatorToken";
         }
     }
 
@@ -104,7 +104,7 @@ public class Token {
 
         @Override
         public String toString() {
-            return String.valueOf(prefixSymbol);
+            return prefixSymbol + " PrefixToken";
         }
     }
 
@@ -142,7 +142,7 @@ public class Token {
 
         @Override
         public String toString() {
-            return String.valueOf(suffixSymbol);
+            return suffixSymbol + " SuffixToken";
         }
     }
 
@@ -177,7 +177,7 @@ public class Token {
 
         @Override
         public String toString() {
-            return String.valueOf(parenthesisSymbol);
+            return parenthesisSymbol + " ParenthesisToken";
         }
     }
 
