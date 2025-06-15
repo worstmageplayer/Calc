@@ -47,30 +47,30 @@ public class Lexer {
                 String number = input.substring(start, i);
                 if (number.equals(".")) throw new RuntimeException("A single dot is not a valid number.");
 
-                tokens.add(Token.numberToken(new BigDecimal(number).stripTrailingZeros()));
+                tokens.add(numberToken(new BigDecimal(number).stripTrailingZeros()));
                 continue;
             }
 
             if (isPrefixChar(c, tokens)) {
-                tokens.add(Token.prefixToken(Prefix.fromSymbol(c)));
+                tokens.add(prefixToken(Prefix.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isSuffixChar(c, tokens) && (i + 1 >= inputLength || !Character.isLetterOrDigit(input.charAt(i + 1)))) {
-                tokens.add(Token.suffixToken(Suffix.fromSymbol(c)));
+                tokens.add(suffixToken(Suffix.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isOperator(c)) {
-                tokens.add(Token.operatorToken(Operator.fromSymbol(c)));
+                tokens.add(operatorToken(Operator.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isParenthesis(c)) {
-                tokens.add(Token.parenthesisToken(Parenthesis.fromSymbol(c)));
+                tokens.add(parenthesisToken(Parenthesis.fromSymbol(c)));
                 i++;
                 continue;
             }
@@ -94,7 +94,7 @@ public class Lexer {
                     if (!Character.isLetterOrDigit(c) && c != '_') break;
                     i++;
                 }
-                tokens.add(Token.identifierToken(input.substring(start, i)));
+                tokens.add(identifierToken(input.substring(start, i)));
                 continue;
             }
 
