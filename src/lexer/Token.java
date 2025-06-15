@@ -1,6 +1,7 @@
 package lexer;
 
 import java.math.BigDecimal;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -237,10 +238,10 @@ public class Token {
 
     private final static Map<BigDecimal, NumberToken> numberPool = new HashMap<>();
     private final static Map<String, IdentifierToken> identifierPool = new HashMap<>();
-    private final static Map<Operator, OperatorToken> operatorPool = new HashMap<>();
-    private final static Map<Prefix, PrefixToken> prefixPool = new HashMap<>();
-    private final static Map<Suffix, SuffixToken> suffixPool = new HashMap<>();
-    private final static Map<Parenthesis, ParenthesisToken> parenthesisPool = new HashMap<>();
+    private final static EnumMap<Operator, OperatorToken> operatorPool = new EnumMap<>(Operator.class);
+    private final static EnumMap<Prefix, PrefixToken> prefixPool = new EnumMap<>(Prefix.class);
+    private final static EnumMap<Suffix, SuffixToken> suffixPool = new EnumMap<>(Suffix.class);
+    private final static EnumMap<Parenthesis, ParenthesisToken> parenthesisPool = new EnumMap<>(Parenthesis.class);
 
     public static NumberToken numberToken(BigDecimal value) {
         return numberPool.computeIfAbsent(value, NumberToken::new);
