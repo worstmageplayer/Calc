@@ -234,4 +234,30 @@ public class Token {
             return "END";
         }
     }
+
+    private final static Map<BigDecimal, NumberToken> numberPool = new HashMap<>();
+    private final static Map<String, IdentifierToken> identifierPool = new HashMap<>();
+    private final static Map<Operator, OperatorToken> operatorPool = new HashMap<>();
+    private final static Map<Prefix, PrefixToken> prefixPool = new HashMap<>();
+    private final static Map<Suffix, SuffixToken> suffixPool = new HashMap<>();
+    private final static Map<Parenthesis, ParenthesisToken> parenthesisPool = new HashMap<>();
+
+    public static NumberToken numberToken(BigDecimal value) {
+        return numberPool.computeIfAbsent(value, NumberToken::new);
+    }
+    public static IdentifierToken identifierToken(String id) {
+        return identifierPool.computeIfAbsent(id.intern(), IdentifierToken::new);
+    }
+    public static OperatorToken operatorToken(Operator op) {
+        return operatorPool.computeIfAbsent(op, OperatorToken::new);
+    }
+    public static PrefixToken prefixToken(Prefix p) {
+        return prefixPool.computeIfAbsent(p, PrefixToken::new);
+    }
+    public static SuffixToken suffixToken(Suffix s) {
+        return suffixPool.computeIfAbsent(s, SuffixToken::new);
+    }
+    public static ParenthesisToken parenthesisToken(Parenthesis p) {
+        return parenthesisPool.computeIfAbsent(p, ParenthesisToken::new);
+    }
 }

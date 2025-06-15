@@ -49,30 +49,30 @@ public class Lexer {
                 String number = input.substring(start, i);
                 if (number.equals(".")) throw new RuntimeException("A single dot is not a valid number.");
 
-                tokens.add(TokenPool.numberToken(new BigDecimal(number).stripTrailingZeros()));
+                tokens.add(Token.numberToken(new BigDecimal(number).stripTrailingZeros()));
                 continue;
             }
 
             if (isPrefixChar(c, tokens)) {
-                tokens.add(TokenPool.prefixToken(Prefix.fromSymbol(c)));
+                tokens.add(Token.prefixToken(Prefix.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isSuffixChar(c, tokens) && (i + 1 >= inputLength || !Character.isLetterOrDigit(input.charAt(i + 1)))) {
-                tokens.add(TokenPool.suffixToken(Suffix.fromSymbol(c)));
+                tokens.add(Token.suffixToken(Suffix.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isOperator(c)) {
-                tokens.add(TokenPool.operatorToken(Operator.fromSymbol(c)));
+                tokens.add(Token.operatorToken(Operator.fromSymbol(c)));
                 i++;
                 continue;
             }
 
             if (isParenthesis(c)) {
-                tokens.add(TokenPool.parenthesisToken(Parenthesis.fromSymbol(c)));
+                tokens.add(Token.parenthesisToken(Parenthesis.fromSymbol(c)));
                 i++;
                 continue;
             }
@@ -96,7 +96,7 @@ public class Lexer {
                     if (!Character.isLetterOrDigit(c) && c != '_') break;
                     i++;
                 }
-                tokens.add(TokenPool.identifierToken(input.substring(start, i)));
+                tokens.add(Token.identifierToken(input.substring(start, i)));
                 continue;
             }
 
@@ -134,33 +134,5 @@ public class Lexer {
             case ParenthesisToken p when p.parenthesis() == Parenthesis.CLOSE -> true;
             default -> false;
         };
-    }
-
-    private static final class TokenPool {
-        private final static Map<BigDecimal, NumberToken> numberPool = new HashMap<>();
-        private final static Map<String, IdentifierToken> identifierPool = new HashMap<>();
-        private final static Map<Operator, OperatorToken> operatorPool = new HashMap<>();
-        private final static Map<Prefix, PrefixToken> prefixPool = new HashMap<>();
-        private final static Map<Suffix, SuffixToken> suffixPool = new HashMap<>();
-        private final static Map<Parenthesis, ParenthesisToken> parenthesisPool = new HashMap<>();
-
-        public static NumberToken numberToken(BigDecimal value) {
-            return numberPool.computeIfAbsent(value, NumberToken::new);
-        }
-        public static IdentifierToken identifierToken(String id) {
-            return identifierPool.computeIfAbsent(id.intern(), IdentifierToken::new);
-        }
-        public static OperatorToken operatorToken(Operator op) {
-            return operatorPool.computeIfAbsent(op, OperatorToken::new);
-        }
-        public static PrefixToken prefixToken(Prefix p) {
-            return prefixPool.computeIfAbsent(p, PrefixToken::new);
-        }
-        public static SuffixToken suffixToken(Suffix s) {
-            return suffixPool.computeIfAbsent(s, SuffixToken::new);
-        }
-        public static ParenthesisToken parenthesisToken(Parenthesis p) {
-            return parenthesisPool.computeIfAbsent(p, ParenthesisToken::new);
-        }
     }
 }
