@@ -3,6 +3,7 @@ package lexer;
 import java.math.BigDecimal;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Token {
@@ -209,8 +210,8 @@ public class Token {
         }
     }
 
-    public record CommaToken() implements TokenType {
-        public static final CommaToken COMMA_TOKEN = new CommaToken();
+    public enum CommaToken implements TokenType {
+        COMMA_TOKEN;
 
         @Override
         public String toString() {
@@ -218,8 +219,8 @@ public class Token {
         }
     }
 
-    public record SemiColonToken() implements TokenType {
-        public static final SemiColonToken SEMI_COLON_TOKEN = new SemiColonToken();
+    public enum SemiColonToken implements TokenType {
+        SEMI_COLON_TOKEN;
 
         @Override
         public String toString() {
@@ -227,8 +228,8 @@ public class Token {
         }
     }
 
-    public record EndToken() implements TokenType {
-        public static final EndToken END_TOKEN = new EndToken();
+    public enum EndToken implements TokenType {
+        END_TOKEN;
 
         @Override
         public String toString() {
@@ -236,8 +237,18 @@ public class Token {
         }
     }
 
-    private final static Map<BigDecimal, NumberToken> numberPool = new HashMap<>();
-    private final static Map<String, IdentifierToken> identifierPool = new HashMap<>();
+    private final static Map<BigDecimal, NumberToken> numberPool = new LinkedHashMap<>(1000, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<BigDecimal, NumberToken> eldest) {
+            return size() > 10000;
+        }
+    };
+    private final static Map<String, IdentifierToken> identifierPool = new LinkedHashMap<>(1000, 0.75f, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, IdentifierToken> eldest) {
+            return size() > 10000;
+        }
+    };
     private final static EnumMap<Operator, OperatorToken> operatorPool = new EnumMap<>(Operator.class);
     private final static EnumMap<Prefix, PrefixToken> prefixPool = new EnumMap<>(Prefix.class);
     private final static EnumMap<Suffix, SuffixToken> suffixPool = new EnumMap<>(Suffix.class);
