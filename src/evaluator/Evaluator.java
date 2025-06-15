@@ -18,9 +18,6 @@ public class Evaluator {
     private static final BigDecimal trillion = BigDecimal.valueOf(1000000000000L);
 
     private static final Deque<Map<String, BigDecimal>> contextStack = new ArrayDeque<>();
-    static {
-        contextStack.push(new HashMap<>());
-    }
 
     public static BigDecimal evaluate(NodeType node) {
         return switch (node) {
@@ -89,9 +86,9 @@ public class Evaluator {
     }
 
     private static BigDecimal resolveVariable(String name) {
-        for (Map<String, BigDecimal> scope : contextStack) {
-            if (scope.containsKey(name)) return scope.get(name);
-        }
+        Map<String, BigDecimal> scope = contextStack.peek();
+        if (scope != null && scope.containsKey(name)) return scope.get(name);
+
         if (Variables.includes(name)) return Variables.get(name);
 
         throw new RuntimeException("Variable not found: " + name);
