@@ -34,13 +34,13 @@ public class Parser {
         switch (token) {
             case NumberToken num -> lhs = new NumberNode(num.value());
             case IdentifierToken id -> {
-                if (isOpenParenthesis(tokens[pos])) {
+                if (tokens[pos] == ParenthesisToken.OPEN) {
                     pos++; // Consume '('
                     List<NodeType> args = new ArrayList<>();
 
-                    while (!isCloseParenthesis(tokens[pos])) {
+                    while (tokens[pos] != ParenthesisToken.CLOSE) {
                         args.add(parseExpression(0));
-                        if (!isCloseParenthesis(tokens[pos])) {
+                        if (tokens[pos] != ParenthesisToken.CLOSE) {
                             if (!(tokens[pos++] instanceof CommaToken)) {
                                 throw new RuntimeException("Expected comma between arguments");
                             }
@@ -56,7 +56,7 @@ public class Parser {
             case PrefixToken prefix -> lhs = prefixNodeSoThatMyIDECanShutUP(prefix);
             case ParenthesisToken p when p == ParenthesisToken.OPEN -> {
                 lhs = parseExpression(0);
-                if (!isCloseParenthesis(tokens[pos])) {
+                if (tokens[pos] != ParenthesisToken.CLOSE) {
                     throw new RuntimeException("Expected closing parenthesis");
                 }
                 pos++;
@@ -71,9 +71,15 @@ public class Parser {
             TokenType next = tokens[pos];
 
             switch (next) {
-                case EndToken ignored -> {break loop;}
-                case CommaToken ignored -> {break loop;}
-                case SemiColonToken ignored -> {break loop;}
+                case EndToken ignored -> {
+                    break loop;
+                }
+                case CommaToken ignored -> {
+                    break loop;
+                }
+                case SemiColonToken ignored -> {
+                    break loop;
+                }
                 case ParenthesisToken parenthesis -> {
                     if (parenthesis == ParenthesisToken.CLOSE) break loop;
 
@@ -82,7 +88,8 @@ public class Parser {
 
                     pos++; // Consume'('
                     NodeType rhs = parseExpression(0);
-                    if (!isCloseParenthesis(tokens[pos])) throw new RuntimeException("Expected closing parenthesis");
+                    if (tokens[pos] != ParenthesisToken.CLOSE)
+                        throw new RuntimeException("Expected closing parenthesis");
                     pos++; // Consume ')'
 
                     lhs = new BinaryOperationNode(lhs, rhs, implicitMul);
@@ -94,13 +101,13 @@ public class Parser {
                 case IdentifierToken id -> {
                     NodeType rhs;
                     pos++; // Consume 'variable'
-                    if (isOpenParenthesis(tokens[pos])) {
+                    if (tokens[pos] == ParenthesisToken.OPEN) {
                         pos++; // Consume '('
                         List<NodeType> args = new ArrayList<>();
 
-                        while (!isCloseParenthesis(tokens[pos])) {
+                        while (tokens[pos] != ParenthesisToken.CLOSE) {
                             args.add(parseExpression(0));
-                            if (!isCloseParenthesis(tokens[pos])) {
+                            if (tokens[pos] != ParenthesisToken.CLOSE) {
                                 if (!(tokens[pos++] instanceof CommaToken)) {
                                     throw new RuntimeException("Expected comma between arguments");
                                 }
@@ -136,13 +143,4 @@ public class Parser {
 
         return lhs;
     }
-
-    private boolean isOpenParenthesis(TokenType token) {
-        return token instanceof ParenthesisToken parenthesis && parenthesis == ParenthesisToken.OPEN;
-    }
-
-    private boolean isCloseParenthesis(TokenType token) {
-        return token instanceof ParenthesisToken parenthesis && parenthesis == ParenthesisToken.CLOSE;
-    }
-
 }
