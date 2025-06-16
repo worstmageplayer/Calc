@@ -7,12 +7,14 @@ import parser.Node.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.List;
 
 import static identifier.Functions.getFunction;
 
 public class Evaluator {
-    private static final Deque<Map<String, BigDecimal>> variablesStack = new ArrayDeque<>();
+    private static final ArrayDeque<HashMap<String, BigDecimal>> variablesStack = new ArrayDeque<>();
 
     public static BigDecimal evaluate(NodeType node) {
         return switch (node) {
@@ -65,7 +67,7 @@ public class Evaluator {
                     throw new RuntimeException("Function '" + f.function().identifier() + "' expects " + paramsSize + " args, got " + f.args().size());
                 }
 
-                Map<String, BigDecimal> scope = new HashMap<>(paramsSize);
+                HashMap<String, BigDecimal> scope = new HashMap<>(paramsSize);
                 for (int i = 0; i < paramsSize; i++) {
                     scope.put(params.get(i), evaluate(f.args().get(i)));
                 }
@@ -79,7 +81,7 @@ public class Evaluator {
     }
 
     private static BigDecimal resolveVariable(String name) {
-        Map<String, BigDecimal> scope = variablesStack.peek();
+        HashMap<String, BigDecimal> scope = variablesStack.peek();
         if (scope != null && scope.containsKey(name)) return scope.get(name);
 
         if (Variables.includes(name)) return Variables.get(name);
