@@ -97,8 +97,9 @@ public class Evaluator {
             throw new RuntimeException("Factorial too large");
         }
         BigDecimal result = BigDecimal.ONE;
+        int valueExact = value.intValueExact();
         int i = 1;
-        while (i <= value.intValueExact()) {
+        while (i <= valueExact) {
             result = result.multiply(BigDecimal.valueOf(i++));
         }
         return result;
