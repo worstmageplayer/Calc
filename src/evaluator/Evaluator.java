@@ -93,14 +93,15 @@ public class Evaluator {
         if (value.signum() < 0 || value.stripTrailingZeros().scale() > 0) {
             throw new ArithmeticException("Factorial only works for positive integers rn");
         }
+
         if (value.compareTo(BigDecimal.valueOf(1000)) >= 0) {
             throw new RuntimeException("Factorial too large");
         }
+
         BigDecimal result = BigDecimal.ONE;
         final int valueExact = value.intValueExact();
-        int i = 1;
-        while (i <= valueExact) {
-            result = result.multiply(BigDecimal.valueOf(i++));
+        for (int i = 1; i <= valueExact; i++) {
+            result = result.multiply(BigDecimal.valueOf(i));
         }
         return result;
     }
