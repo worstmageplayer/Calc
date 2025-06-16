@@ -208,36 +208,43 @@ public class Token {
         }
     }
 
-    private static final int MAX_CACHE = 5000;
+    private static final int NUMBER_POOL_MAX_CACHE = 5000;
+    private static final int IDENTIFIER_POOL_MAX_CACHE = 50;
 
-    private final static Map<BigDecimal, NumberToken> numberPool = new LinkedHashMap<>(MAX_CACHE, 1, true) {
+    private final static Map<BigDecimal, NumberToken> numberPool = new LinkedHashMap<>(NUMBER_POOL_MAX_CACHE + 1, 1, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<BigDecimal, NumberToken> eldest) {
-            return size() > MAX_CACHE;
+            return size() > NUMBER_POOL_MAX_CACHE;
         }
     };
-    private final static Map<String, IdentifierToken> identifierPool = new LinkedHashMap<>(MAX_CACHE, 1, true) {
+
+    private final static Map<String, IdentifierToken> identifierPool = new LinkedHashMap<>(IDENTIFIER_POOL_MAX_CACHE  + 1, 1, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, IdentifierToken> eldest) {
-            return size() > MAX_CACHE;
+            return size() > IDENTIFIER_POOL_MAX_CACHE ;
         }
     };
 
     public static NumberToken numberToken(String value) {
         return numberPool.computeIfAbsent(new BigDecimal(value).stripTrailingZeros(), NumberToken::new);
     }
+
     public static IdentifierToken identifierToken(String id) {
         return identifierPool.computeIfAbsent(id.intern(), IdentifierToken::new);
     }
+
     public static OperatorToken operatorToken(char c) {
         return OperatorToken.fromSymbol(c);
     }
+
     public static PrefixToken prefixToken(char c) {
         return PrefixToken.fromSymbol(c);
     }
+
     public static SuffixToken suffixToken(char c) {
         return SuffixToken.fromSymbol(c);
     }
+
     public static ParenthesisToken parenthesisToken(char c) {
         return ParenthesisToken.fromSymbol(c);
     }
