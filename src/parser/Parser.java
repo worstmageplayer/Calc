@@ -68,15 +68,9 @@ public class Parser {
             TokenType next = tokens[pos];
 
             switch (next) {
-                case EndToken ignored -> {
-                    break loop;
-                }
-                case CommaToken ignored -> {
-                    break loop;
-                }
-                case SemiColonToken ignored -> {
-                    break loop;
-                }
+                case EndToken ignored -> { break loop; }
+                case CommaToken ignored -> { break loop; }
+                case SemiColonToken ignored -> { break loop; }
                 case ParenthesisToken parenthesis -> {
                     if (parenthesis == ParenthesisToken.CLOSE) break loop;
 
