@@ -135,7 +135,6 @@ public class Parser {
                 case PrefixToken ignored -> throw new RuntimeException("This shouldn't be here");
             }
         }
-
         return lhs;
     }
 }

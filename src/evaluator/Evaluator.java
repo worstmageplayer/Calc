@@ -61,7 +61,7 @@ public class Evaluator {
             case FunctionNode f -> {
                 Functions.Function func = getFunction(f.function().identifier());
                 List<String> params = func.params();
-                int paramsSize = params.size();
+                final int paramsSize = params.size();
 
                 if (f.args().size() != paramsSize) {
                     throw new RuntimeException("Function '" + f.function().identifier() + "' expects " + paramsSize + " args, got " + f.args().size());
