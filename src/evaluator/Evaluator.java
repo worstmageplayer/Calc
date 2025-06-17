@@ -1,5 +1,6 @@
 package evaluator;
 
+import Exceptions.EvaluatorException;
 import identifier.Functions;
 import identifier.Variables;
 import lexer.Token;
@@ -27,11 +28,11 @@ public class Evaluator {
                     case SUB -> left.subtract(right);
                     case MUL -> left.multiply(right);
                     case DIV -> {
-                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new RuntimeException("Division by zero.");
+                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new EvaluatorException("Division by zero.");
                         else yield left.divide(right, 20, RoundingMode.HALF_UP);
                     }
                     case MOD -> {
-                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new RuntimeException("Division by zero.");
+                        if (right.compareTo(BigDecimal.ZERO) == 0) throw new EvaluatorException("Division by zero.");
                         else yield left.remainder(right);
                     }
                     case POW -> {
@@ -64,7 +65,7 @@ public class Evaluator {
                 final int paramsSize = params.size();
 
                 if (f.args().size() != paramsSize) {
-                    throw new RuntimeException("Function '" + f.function().identifier() + "' expects " + paramsSize + " args, got " + f.args().size());
+                    throw new EvaluatorException("Function '" + f.function().identifier() + "' expects " + paramsSize + " args, got " + f.args().size());
                 }
 
                 HashMap<String, BigDecimal> scope = new HashMap<>(paramsSize);
@@ -86,7 +87,7 @@ public class Evaluator {
 
         if (Variables.includes(name)) return Variables.get(name);
 
-        throw new RuntimeException("Variable not found: " + name);
+        throw new EvaluatorException("Variable not found: " + name);
     }
 
     private static BigDecimal factorial(BigDecimal value) {
@@ -95,7 +96,7 @@ public class Evaluator {
         }
 
         if (value.compareTo(BigDecimal.valueOf(1000)) >= 0) {
-            throw new RuntimeException("Factorial too large");
+            throw new EvaluatorException("Factorial too large");
         }
 
         BigDecimal result = BigDecimal.ONE;

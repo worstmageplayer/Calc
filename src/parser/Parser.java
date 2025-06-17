@@ -1,5 +1,6 @@
 package parser;
 
+import Exceptions.ParserException;
 import lexer.Token.*;
 import parser.Node.*;
 
@@ -40,7 +41,7 @@ public class Parser {
                     while (tokens[pos] != ParenthesisToken.CLOSE) {
                         args.add(parseExpression(0));
                         if (tokens[pos] != ParenthesisToken.CLOSE && tokens[pos++] != CommaToken.COMMA_TOKEN) {
-                            throw new RuntimeException("Expected comma between arguments");
+                            throw new ParserException("Expected comma between arguments");
                         }
                     }
 
@@ -54,11 +55,11 @@ public class Parser {
             case ParenthesisToken p when p == ParenthesisToken.OPEN -> {
                 lhs = parseExpression(0);
                 if (tokens[pos] != ParenthesisToken.CLOSE) {
-                    throw new RuntimeException("Expected closing parenthesis");
+                    throw new ParserException("Expected closing parenthesis");
                 }
                 pos++;
             }
-            default -> throw new RuntimeException("Unexpected token: " + token);
+            default -> throw new ParserException("Unexpected token: " + token);
         }
 
         loop:
@@ -80,7 +81,7 @@ public class Parser {
                     pos++; // Consume'('
                     NodeType rhs = parseExpression(0);
                     if (tokens[pos] != ParenthesisToken.CLOSE)
-                        throw new RuntimeException("Expected closing parenthesis");
+                        throw new ParserException("Expected closing parenthesis");
                     pos++; // Consume ')'
 
                     lhs = new BinaryOperationNode(lhs, rhs, implicitMul);
@@ -99,7 +100,7 @@ public class Parser {
                         while (tokens[pos] != ParenthesisToken.CLOSE) {
                             args.add(parseExpression(0));
                             if (tokens[pos] != ParenthesisToken.CLOSE && tokens[pos++] != CommaToken.COMMA_TOKEN) {
-                                throw new RuntimeException("Expected comma between arguments");
+                                throw new ParserException("Expected comma between arguments");
                             }
                         }
 
@@ -126,7 +127,7 @@ public class Parser {
                     NodeType rhs = new NumberNode(value);
                     lhs = new BinaryOperationNode(lhs, rhs, implicitMul);
                 }
-                case PrefixToken ignored -> throw new RuntimeException("This shouldn't be here");
+                case PrefixToken ignored -> throw new ParserException("This shouldn't be here");
             }
         }
         return lhs;

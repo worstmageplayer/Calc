@@ -1,5 +1,6 @@
 package lexer;
 
+import Exceptions.LexerException;
 import lexer.Token.TokenType;
 
 import java.math.BigDecimal;
@@ -37,14 +38,14 @@ public class Lexer {
                     if (Character.isDigit(c)) {
                         i++;
                     } else if (c == '.') {
-                        if (dot) throw new RuntimeException("Multiple dots in number");
+                        if (dot) throw new LexerException("Multiple dots in number");
                         dot = true;
                         i++;
                     } else break;
                 }
 
                 String number = input.substring(start, i);
-                if (number.equals(".")) throw new RuntimeException("A single dot is not a valid number.");
+                if (number.equals(".")) throw new LexerException("A single dot is not a valid number.");
 
                 tokens.add(numberToken(number));
                 continue;
@@ -97,7 +98,7 @@ public class Lexer {
                 continue;
             }
 
-            throw new RuntimeException("Invalid char: " + c);
+            throw new LexerException("Invalid char: " + c);
         }
 
         tokens.add(EndToken.END_TOKEN);

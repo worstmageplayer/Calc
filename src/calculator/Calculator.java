@@ -1,5 +1,6 @@
 package calculator;
 
+import Exceptions.CalculatorException;
 import identifier.Variables;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class Calculator {
         }
 
         public String round(int places) {
-            if (places < 0) throw new IllegalArgumentException("Decimal places must be non-negative");
+            if (places < 0) throw new CalculatorException("Decimal places must be non-negative");
             return value.setScale(places, RoundingMode.HALF_UP).toPlainString();
         }
 
